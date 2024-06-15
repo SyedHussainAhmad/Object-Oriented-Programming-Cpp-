@@ -1,19 +1,20 @@
-#ifndef CAESAR_CIPHER_H
-#define CAESAR_CIPHER_H
+#ifndef CAESARCIPHER_H
+#define CAESARCIPHER_H
 
-#include "String.h"
-#include "Encryptor.h"
+#include"Encryptor.h"
 
 class CaesarCipher : public Encryptor
 {
+private:
     int shift;
-    char shiftChar(char c, int shift) const;
-    bool isAlphabet(char c) const;
+    bool isAlphaChar(char ch) const;
+    char shiftChar(char ch, int shift) const;
+
 public:
     CaesarCipher(int shift);
+    void setShift(int newShift);
     String encrypt(const String& message) const override;
-    String decrypt(const String& cipher) const override;
-
+    String decrypt(const String& message) const override;
 };
 
-#endif  // CAESAR_CIPHER_H
+#endif // CAESARCIPHER_H

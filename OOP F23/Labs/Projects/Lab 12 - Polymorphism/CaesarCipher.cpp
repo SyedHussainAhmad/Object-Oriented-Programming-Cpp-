@@ -1,51 +1,47 @@
 #include "CaesarCipher.h"
 
-//Private Functions:
-
-char CaesarCipher::shiftChar(char c, int shift) const 
-{
-    char base = (c>= 'a' && c <= 'z') ? 'a' : 'A';
-    return ((c - base + shift + 26) % 26) + base;
-}
-
-bool CaesarCipher::isAlphabet(char c) const 
-{
-    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-}
-
 CaesarCipher::CaesarCipher(int shift) : shift(shift) {}
+
+void CaesarCipher::setShift(int newShift) 
+{
+    shift = newShift;
+}
+
+bool CaesarCipher::isAlphaChar(char ch) const 
+{
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+}
+
+char CaesarCipher::shiftChar(char ch, int shift) const 
+{
+    char base = (ch >= 'A' && ch <= 'Z') ? 'A' : 'a';
+    return static_cast<char>((ch - base + shift) % 26 + base);
+}
 
 String CaesarCipher::encrypt(const String& message) const 
 {
-    String result;
-    for (int i = 0; i < message.getLength(); i++) {
-        char c = message[i];
-        if (isAlphabet(c)) 
+    String encryptedMessage = message;
+    for (size_t i = 0; i < encryptedMessage.getLength(); i++) 
+    {
+        char& ch = encryptedMessage[i];
+        if (isAlphaChar(ch)) 
         {
-            result += shiftChar(c, shift);
-        }
-        else 
-        {
-            result += c;  
+            ch = shiftChar(ch, shift);
         }
     }
-    return result;
+    return encryptedMessage;
 }
 
 String CaesarCipher::decrypt(const String& cipher) const 
 {
-    String result;
-    for (int i = 0; i < cipher.getLength(); i++) 
+    String decryptedMessage = cipher;
+    for (size_t i = 0; i < decryptedMessage.getLength(); i++) 
     {
-        char c = cipher[i];
-        if (isAlphabet(c)) 
+        char& ch = decryptedMessage[i];
+        if (isAlphaChar(ch)) 
         {
-            result += shiftChar(c, -shift);
-        }
-        else 
-        {
-            result += c;
+            ch = shiftChar(ch, -shift);
         }
     }
-    return result;
+    return decryptedMessage;
 }

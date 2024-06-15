@@ -1,50 +1,54 @@
 #include "VigenereCipher.h"
 
-//Private Functions:
+VigenereCipher::VigenereCipher(const String& keyword) : keyword(keyword) {}
 
-char VigenereCipher::shiftChar(char c, int shift) const
+void VigenereCipher::setKeyword(const String& newKeyword) 
 {
-    return c+shift;
+    keyword = newKeyword;
 }
 
-bool VigenereCipher::isAlphabet(char c) const
+bool VigenereCipher::isAlphaChar(char ch) const 
 {
-    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
 }
 
-VigenereCipher::VigenereCipher(int shift) : shift(shift) {}
-
-String VigenereCipher::encrypt(const String& message) const
+char VigenereCipher::shiftChar(char ch, int shift) const 
 {
-    String result;
-    for (int i = 0; i < message.getLength(); i++) {
-        char c = message[i];
-        if (isAlphabet(c))
-        {
-            result += c;
-        }
-        else
-        {
-            result += shiftChar(c, shift);
-        }
-    }
-    return result;
+    char base = (ch >= 'A' && ch <= 'Z') ? 'A' : 'a';
+    return static_cast<char>((ch - base + shift) % 26 + base);
 }
 
-String VigenereCipher::decrypt(const String& cipher) const
+String VigenereCipher::encrypt(const String& message) const 
 {
-    String result;
-    for (int i = 0; i < cipher.getLength(); i++)
+    String encryptedMessage = message;
+    int keywordLength = keyword.getLength();
+    int keywordIndex = 0;
+    for (size_t i = 0; i < encryptedMessage.getLength(); i++) 
     {
-        char c = cipher[i];
-        if (isAlphabet(c))
+        char& ch = encryptedMessage[i];
+        if (isAlphaChar(ch)) 
         {
-            result += c;
-        }
-        else
-        {
-            result += shiftChar(c, -shift);
+            int shift = keyword[keywordIndex % keywordLength] - 'A';
+            ch = shiftChar(ch, shift);
+            keywordIndex++;
         }
     }
-    return result;
+    return encryptedMessage;
+}
+
+String VigenereCipher::decrypt(const String& message) const 
+{
+    String decryptedMessage = message;
+    int keywordLength = keyword.getLength();
+    int keywordIndex = 0;
+    for (size_t i = 0; i < decryptedMessage.getLength(); i++) 
+    {
+        char& ch = decryptedMessage[i];
+        if (isAlphaChar(ch)) {
+            int shift = keyword[keywordIndex % keywordLength] - 'A';
+            ch = shiftChar(ch, -shift);
+            keywordIndex++;
+        }
+    }
+    return decryptedMessage;
 }

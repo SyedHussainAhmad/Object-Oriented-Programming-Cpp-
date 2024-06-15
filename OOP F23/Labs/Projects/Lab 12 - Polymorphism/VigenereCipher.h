@@ -1,19 +1,20 @@
 #ifndef VIGENERECIPHER_H
 #define VIGENERECIPHER_H
 
-#include "Encryptor.h"
+#include"Encryptor.h"
 
-class VigenereCipher : public Encryptor 
+class VigenereCipher : public Encryptor
 {
 private:
-    int shift;
-    char shiftChar(char c, int shift) const;
-    bool isAlphabet(char c) const;
+    String keyword;
+    bool isAlphaChar(char ch) const;
+    char shiftChar(char ch, int shift) const;
+
 public:
-    VigenereCipher(int shift);
-    virtual String encrypt(const String& message) const override;
-    virtual String decrypt(const String& cipher) const override;
+    VigenereCipher(const String& keyword);
+    void setKeyword(const String& newKeyword);
+    String encrypt(const String& message) const override;
+    String decrypt(const String& message) const override;
 };
 
-#endif  // VIGENERECIPHER_H
-
+#endif // VIGENERECIPHER_H
