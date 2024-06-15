@@ -4,20 +4,21 @@
 #include<stdarg.h>
 using namespace std;
 
+template <typename T>
 class Array
 {
-	int size;
-	int *data;
-	void copyArray(Array* , int*);
+	T size;
+	T *data;
+	void copyArray(Array* , T*);
 public:
-	Array(int , ...);
-	//Array(int);
+	Array(T , ...);
+	//Array(T);
 	Array(const Array &);
 	~Array();
-	int& operator[](int );
-	const int &operator[](int ) const;
-	int getSize() const;
-	void reSize(int);
+	T& operator[](T );
+	const T &operator[](T ) const;
+	T getSize() const;
+	void reSize(T);
 };
 
 #endif // !ARRAY_H
